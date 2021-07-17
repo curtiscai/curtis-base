@@ -1,15 +1,18 @@
-package com.curtis.jdbc.mssql;
+package com.curtis.jdbc.mysql;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 /**
  * @author curtis.cai
- * @desc SQL Server查询参数个数限制测试
+ * @desc MySQL查询参数个数限制测试
  * @date 2021-07-17
  * @email curtis.cai@outlook.com
  * @reference
@@ -23,13 +26,14 @@ public class BatchInsertLimitTest {
     /*******************************************************************************************************************/
 
     /**
-     * SQL Server直接执行拼接后的批量插入的SQL的方式有行数1000行的限制，但是无2100个参数的限制
+     * MySQL直接执行拼接后的批量插入的SQL的方式无行数限制，也无参数个数限制
      */
     @Test
     public void testBatchInsertLimitWithStatement() {
-        String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String url = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=db_test";
-        String user = "sa";
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
+        String url = "jdbc:mysql://192.168.2.101:3306/db_test?useSSL=true&characterEncoding=utf-8&serverTimezone=GMT";
+        String user = "root";
         String password = "000000";
         try {
             Class.forName(driverName);
@@ -38,9 +42,8 @@ public class BatchInsertLimitTest {
             StringBuilder sqlValue = new StringBuilder();
             String sql = "";
 
-//            int insertRowCount = 100; // (100*10=1000行,10000个参数)test OK
-//            int insertRowCount = 101; // (101*10=1010行,10100个参数)test Error com.microsoft.sqlserver.jdbc.SQLServerException: INSERT 语句中行值表达式的数目超出了允许的最大行值数 1000。
-            int insertRowCount = 101; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: INSERT 语句中行值表达式的数目超出了允许的最大行值数 1000。
+            // int insertRowCount = 10000; // Error:com.mysql.cj.jdbc.exceptions.PacketTooBigException: Packet for query is too large (5,089,482 > 4,194,304). You can change this value on the server by setting the 'max_allowed_packet' variable.
+            int insertRowCount = 8000;
             for (int i = 1; i <= insertRowCount; i++) {
                 sqlValue.append("(").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append("),");
                 sqlValue.append("(").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append(",").append(i).append("),");
@@ -59,6 +62,7 @@ public class BatchInsertLimitTest {
             Connection connection = DriverManager.getConnection(url, user, password);
             Statement statement = connection.createStatement();
             int insertCount = statement.executeUpdate(sql);
+            // The result is:80000
             LOGGER.info("The result is:{}", insertCount);
         } catch (Exception e) {
             e.printStackTrace();
@@ -67,13 +71,14 @@ public class BatchInsertLimitTest {
     }
 
     /**
-     * SQL Server使用预编译的SQL去批量插入的SQL的方式有行数1000行的限制，也有2100个参数的限制
+     * MySQL使用预编译的批量插入的SQL的方式无行数限制，也无参数个数限制
      */
     @Test
     public void testBatchInsertLimitWithPrepareStatement1() {
-        String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String url = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=db_test";
-        String user = "sa";
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
+        String url = "jdbc:mysql://192.168.2.101:3306/db_test?useSSL=true&characterEncoding=utf-8&serverTimezone=GMT";
+        String user = "root";
         String password = "000000";
         try {
             Class.forName(driverName);
@@ -82,12 +87,7 @@ public class BatchInsertLimitTest {
             StringBuilder sqlValue = new StringBuilder();
             String sql = "";
 
-//            int queryParamCount = 1000; // test OK
-//            int queryParamCount = 1001; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: INSERT 语句中行值表达式的数目超出了允许的最大行值数 1000。
-//            int queryParamCount = 2098; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: INSERT 语句中行值表达式的数目超出了允许的最大行值数 1000。
-//            int queryParamCount = 2099; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
-//            int queryParamCount = 2100; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
-            int insertRowCount = 1001;
+            int insertRowCount = 10000;
             for (int i = 1; i <= insertRowCount; i++) {
                 sqlValue.append("(?),");
             }
@@ -100,6 +100,7 @@ public class BatchInsertLimitTest {
                 preparedStatement.setInt(i, i);
             }
             int insertCount = preparedStatement.executeUpdate();
+            // The result is:10000
             LOGGER.info("The result is:{}", insertCount);
         } catch (Exception e) {
             e.printStackTrace();
@@ -108,13 +109,14 @@ public class BatchInsertLimitTest {
     }
 
     /**
-     * SQL Server使用预编译的SQL去批量插入的SQL的方式有行数1000行的限制，也有2100个参数的限制
+     * MySQL使用预编译的批量插入的SQL的方式无行数限制，也无参数个数限制
      */
     @Test
     public void testBatchInsertLimitWithPrepareStatement2() {
-        String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String url = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=db_test";
-        String user = "sa";
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
+        String url = "jdbc:mysql://192.168.2.101:3306/db_test?useSSL=true&characterEncoding=utf-8&serverTimezone=GMT";
+        String user = "root";
         String password = "000000";
         try {
             Class.forName(driverName);
@@ -123,9 +125,7 @@ public class BatchInsertLimitTest {
             StringBuilder sqlValue = new StringBuilder();
             String sql = "";
 
-//            int queryParamCount = 209; // test OK
-//            int queryParamCount = 210; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
-            int insertRowCount = 210;
+            int insertRowCount = 10000;
             for (int i = 1; i <= insertRowCount; i++) {
                 sqlValue.append("(?,?,?,?,?,?,?,?,?,?),");
             }
@@ -147,6 +147,7 @@ public class BatchInsertLimitTest {
                 preparedStatement.setInt((i - 1) * 10 + 10, i);
             }
             int insertCount = preparedStatement.executeUpdate();
+            // The result is:10000
             LOGGER.info("The result is:{}", insertCount);
         } catch (Exception e) {
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.curtis.jdbc.mssql;
+package com.curtis.jdbc.mysql;
 
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
@@ -9,7 +9,7 @@ import java.sql.*;
 
 /**
  * @author curtis.cai
- * @desc SQL Server查询参数个数限制测试
+ * @desc MySQL查询参数个数无限制测试
  * @date 2021-07-17
  * @email curtis.cai@outlook.com
  * @reference
@@ -23,13 +23,14 @@ public class QueryParamCountLimitTest {
     /*******************************************************************************************************************/
 
     /**
-     * SQL Server直接使用拼接后的SQL去查询的方式没有参数方面的限制
+     * MySQL直接使用拼接后的SQL去查询的方式没有参数方面的限制
      */
     @Test
     public void testQueryParamCountLimitWithStatement() {
-        String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String url = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=db_test";
-        String user = "sa";
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
+        String url = "jdbc:mysql://192.168.2.101:3306/db_test?useSSL=true&characterEncoding=utf-8&serverTimezone=GMT";
+        String user = "root";
         String password = "000000";
         try {
             Class.forName(driverName);
@@ -58,13 +59,14 @@ public class QueryParamCountLimitTest {
     }
 
     /**
-     * SQL Server使用预编译的SQL去查询的方式有参数方面的限制（2100）
+     * MySQL使用预编译的SQL去查询的方式也无参数方面的限制
      */
     @Test
     public void testQueryParamCountLimitWithPrepareStatement() {
-        String driverName = "com.microsoft.sqlserver.jdbc.SQLServerDriver";
-        String url = "jdbc:sqlserver://127.0.0.1:1433;DatabaseName=db_test";
-        String user = "sa";
+        String driverName = "com.mysql.cj.jdbc.Driver";
+        // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
+        String url = "jdbc:mysql://192.168.2.101:3306/db_test?useSSL=true&characterEncoding=utf-8&serverTimezone=GMT";
+        String user = "root";
         String password = "000000";
         try {
             Class.forName(driverName);
@@ -73,10 +75,7 @@ public class QueryParamCountLimitTest {
             StringBuilder sqlValue = new StringBuilder();
             String sql = "";
 
-//            int queryParamCount = 2100;
-//            int queryParamCount = 2098; // test OK
-//            int queryParamCount = 2099; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
-            int queryParamCount = 2099; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
+            int queryParamCount = 10000; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
             for (int i = 1; i <= queryParamCount; i++) {
                 sqlValue.append("?").append(",");
             }
