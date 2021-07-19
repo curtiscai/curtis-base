@@ -19,7 +19,7 @@ public class QueryParamCountLimitTest {
     private static final Logger LOGGER = LoggerFactory.getLogger(QueryParamCountLimitTest.class);
 
     /*******************************************************************************************************************/
-    /***************************************** SQL数据查询时参数限制：参数个数 **********************************************/
+    /***************************************** MySQL数据查询时无参数个数限制 **********************************************/
     /*******************************************************************************************************************/
 
     /**
@@ -75,7 +75,7 @@ public class QueryParamCountLimitTest {
             StringBuilder sqlValue = new StringBuilder();
             String sql = "";
 
-            int queryParamCount = 10000; // test Error com.microsoft.sqlserver.jdbc.SQLServerException: 传入的请求具有过多的参数。该服务器支持最多 2100 个参数。请减少参数的数目，然后重新发送该请求。
+            int queryParamCount = 10000;
             for (int i = 1; i <= queryParamCount; i++) {
                 sqlValue.append("?").append(",");
             }
