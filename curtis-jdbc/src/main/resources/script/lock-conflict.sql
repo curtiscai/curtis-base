@@ -62,5 +62,5 @@ BEGIN
 END;
 
 -- 生成100w测试数据
--- completed in 1 m 34 s 512 ms
-CALL prod_create_tb_test_lock_data(100 * 10000);
+-- completed in 16 m 51 s 553 ms
+CALL prod_create_tb_test_lock_data(1000 * 10000);
