@@ -32,7 +32,7 @@ public class BatchUpdateLockConflictTest {
 
     /**
      * 测试循环进行批量更新：循环10次
-     * 完成全部批量更新： -> 耗时PT46.766S秒
+     * 完成全部批量更新： -> 耗时PT1M4.423S秒
      */
     @Test
     public void testBatchUpdateLockConflictWithLoop() {
@@ -72,16 +72,16 @@ public class BatchUpdateLockConflictTest {
                 LocalTime innerEndTime = LocalTime.now();
                 Duration innerBetween = Duration.between(innerStartTime, innerEndTime);
                 /*
-                23:20:17,087  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:1, endIndex:1000000, updateCount:1000000, 耗时PT6.104S秒
-                23:20:22,416  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:1000001, endIndex:2000000, updateCount:1000000, 耗时PT5.327S秒
-                23:20:27,652  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:2000001, endIndex:3000000, updateCount:1000000, 耗时PT5.235S秒
-                23:20:32,817  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:3000001, endIndex:4000000, updateCount:1000000, 耗时PT5.165S秒
-                23:20:38,067  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:4000001, endIndex:5000000, updateCount:1000000, 耗时PT5.25S秒
-                23:20:43,428  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:5000001, endIndex:6000000, updateCount:1000000, 耗时PT5.361S秒
-                23:20:48,729  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:6000001, endIndex:7000000, updateCount:1000000, 耗时PT5.301S秒
-                23:20:54,106  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:7000001, endIndex:8000000, updateCount:1000000, 耗时PT5.377S秒
-                23:20:59,413  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:8000001, endIndex:9000000, updateCount:1000000, 耗时PT5.307S秒
-                23:21:05,676  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:9000001, endIndex:10000000, updateCount:1000000, 耗时PT6.263S秒
+                22:25:46,597  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:1, endIndex:1000000, updateCount:1000000, 耗时PT8.603S秒
+                22:25:53,385  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:1000001, endIndex:2000000, updateCount:1000000, 耗时PT6.786S秒
+                22:26:00,199  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:2000001, endIndex:3000000, updateCount:1000000, 耗时PT6.814S秒
+                22:26:06,823  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:3000001, endIndex:4000000, updateCount:1000000, 耗时PT6.624S秒
+                22:26:13,574  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:4000001, endIndex:5000000, updateCount:1000000, 耗时PT6.75S秒
+                22:26:19,836  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:5000001, endIndex:6000000, updateCount:1000000, 耗时PT6.262S秒
+                22:26:25,542  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:6000001, endIndex:7000000, updateCount:1000000, 耗时PT5.706S秒
+                22:26:31,309  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:7000001, endIndex:8000000, updateCount:1000000, 耗时PT5.767S秒
+                22:26:36,980  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:8000001, endIndex:9000000, updateCount:1000000, 耗时PT5.671S秒
+                22:26:42,410  INFO BatchUpdateLockConflictTest:86 - 完成单次批量更新： -> startIndex:9000001, endIndex:10000000, updateCount:1000000, 耗时PT5.43S秒
                  */
                 LOGGER.info("完成单次批量更新： -> startIndex:{}, endIndex:{}, updateCount:{}, 耗时{}秒", startIndex, endIndex, updateCount, innerBetween);
             } catch (Exception e) {
@@ -91,12 +91,13 @@ public class BatchUpdateLockConflictTest {
         }
         LocalTime endTime = LocalTime.now();
         Duration between = Duration.between(startTime, endTime);
-        // 23:21:05,676  INFO BatchUpdateLockConflictTest:95 - 完成全部批量更新： -> 耗时PT54.699S秒
+        // 22:26:42,411  INFO BatchUpdateLockConflictTest:95 - 完成全部批量更新： -> 耗时PT1M4.423S秒
         LOGGER.info("完成全部批量更新： -> 耗时{}秒", between);
     }
 
     /**
-     * MySQL批量更新锁冲突测试
+     * 测试并发分页批量更新 - 间隔索引键值：10个线程
+     * 完成全部批量更新： -> 耗时PT46.302S秒
      */
     @Test
     public void testBatchUpdateLockConflictWithConcurrency() {
@@ -122,6 +123,7 @@ public class BatchUpdateLockConflictTest {
 
         LocalTime startTime = LocalTime.now();
         ExecutorService executorService = Executors.newFixedThreadPool(10);
+        // ExecutorService executorService = Executors.newFixedThreadPool(1);
         // 1. 间隔批量更新
         List<Future<?>> futureList = new ArrayList<>();
         for (int i = 1; i <= batchCount; i++) {
@@ -139,16 +141,16 @@ public class BatchUpdateLockConflictTest {
                     LocalTime innerEndTime = LocalTime.now();
                     Duration innerBetween = Duration.between(innerStartTime, innerEndTime);
                     /*
-                    23:25:02,403  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:3000001, endIndex:3999999, updateCount:999999, 耗时PT21.317S秒
-                    23:25:03,063  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:8000001, endIndex:8999999, updateCount:999999, 耗时PT21.983S秒
-                    23:25:03,528  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:5000001, endIndex:5999999, updateCount:999999, 耗时PT22.449S秒
-                    23:25:17,005  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:1000001, endIndex:1999999, updateCount:999999, 耗时PT35.926S秒
-                    23:25:17,005  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:6000001, endIndex:6999999, updateCount:999999, 耗时PT35.926S秒
-                    23:25:17,005  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:1, endIndex:999999, updateCount:999999, 耗时PT35.926S秒
-                    23:25:17,009  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:2000001, endIndex:2999999, updateCount:999999, 耗时PT35.926S秒
-                    23:25:17,649  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:7000001, endIndex:7999999, updateCount:999999, 耗时PT36.57S秒
-                    23:25:17,653  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:4000001, endIndex:4999999, updateCount:999999, 耗时PT36.574S秒
-                    23:25:17,653  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:9000001, endIndex:9999999, updateCount:999999, 耗时PT36.574S秒
+                    22:38:23,428  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:9000001, endIndex:9999999, updateCount:999999, 耗时PT32.825S秒
+                    22:38:24,068  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:4000001, endIndex:4999999, updateCount:999999, 耗时PT33.474S秒
+                    22:38:29,853  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:1, endIndex:999999, updateCount:999999, 耗时PT39.258S秒
+                    22:38:29,854  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:1000001, endIndex:1999999, updateCount:999999, 耗时PT39.259S秒
+                    22:38:29,854  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:2000001, endIndex:2999999, updateCount:999999, 耗时PT39.259S秒
+                    22:38:29,854  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:5000001, endIndex:5999999, updateCount:999999, 耗时PT39.259S秒
+                    22:38:36,845  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:6000001, endIndex:6999999, updateCount:999999, 耗时PT46.249S秒
+                    22:38:36,845  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:3000001, endIndex:3999999, updateCount:999999, 耗时PT46.249S秒
+                    22:38:36,844  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:7000001, endIndex:7999999, updateCount:999999, 耗时PT46.249S秒
+                    22:38:36,849  INFO BatchUpdateLockConflictTest:153 - 完成单次批量更新： -> startIndex:8000001, endIndex:8999999, updateCount:999999, 耗时PT46.254S秒
                      */
                     LOGGER.info("完成单次批量更新： -> startIndex:{}, endIndex:{}, updateCount:{}, 耗时{}秒", startIndex, endIndex, updateCount, innerBetween);
                 } catch (Exception e) {
@@ -186,7 +188,7 @@ public class BatchUpdateLockConflictTest {
             int updateCount = preparedStatement.executeUpdate();
             LocalTime intervalEndTime = LocalTime.now();
             Duration intervalBetween = Duration.between(intervalStartTime, intervalEndTime);
-            // 23:25:18,019  INFO BatchUpdateLockConflictTest:190 - 完成间隔数据更新： -> 更新数据条数：10, 更新耗时：PT0.358S秒
+            // 22:38:36,892  INFO BatchUpdateLockConflictTest:190 - 完成间隔数据更新： -> 更新数据条数：10, 更新耗时：PT0.037S秒
             LOGGER.info("完成间隔数据更新： -> 更新数据条数：{}, 更新耗时：{}秒", updateCount, intervalBetween);
         } catch (Exception e){
             // e.printStackTrace();
@@ -195,16 +197,18 @@ public class BatchUpdateLockConflictTest {
 
         LocalTime endTime = LocalTime.now();
         Duration between = Duration.between(startTime, endTime);
-        // 23:25:18,019  INFO BatchUpdateLockConflictTest:199 - 完成全部批量更新： -> 耗时PT36.944S秒
+        // 22:38:36,893  INFO BatchUpdateLockConflictTest:199 - 完成全部批量更新： -> 耗时PT46.302S秒
         LOGGER.info("完成全部批量更新： -> 耗时{}秒", between);
     }
 
 
     /**
-     * 测试批量更新
+     * 测试并发分页批量更新 - 不间隔索引键值：10个线程
+     * 抛出异常：com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+     *
      */
     @Test
-    public void testBatchUpdateLockConflict1() {
+    public void testBatchUpdateLockConflictWithConcurrency2() {
 
         String driverName = "com.mysql.cj.jdbc.Driver";
         // String driverName = "com.mysql.jdbc.Driver"; // mysql-connector-java 5.*使用
@@ -244,16 +248,16 @@ public class BatchUpdateLockConflictTest {
                     LocalTime innerEndTime = LocalTime.now();
                     Duration innerBetween = Duration.between(innerStartTime, innerEndTime);
                     /*
-23:39:09,518  INFO BatchUpdateLockConflictTest:258 - 完成单次批量更新： -> startIndex:9000001, endIndex:10000000, updateCount:1000000, 耗时PT23.209S秒
-23:39:09,956  INFO BatchUpdateLockConflictTest:258 - 完成单次批量更新： -> startIndex:8000001, endIndex:9000000, updateCount:1000000, 耗时PT23.654S秒
-23:39:53,191  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:53,269  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:53,506  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:54,626  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:54,693  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:54,788  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:55,071  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
-23:39:55,071  INFO BatchUpdateLockConflictTest:261 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:08:21,327  INFO BatchUpdateLockConflictTest:260 - 完成单次批量更新： -> startIndex:9000001, endIndex:10000000, updateCount:1000000, 耗时PT22.558S秒
+                    23:08:53,561  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:06,073  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:07,171  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:08,229  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:08,454  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:08,550  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:09,110  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:09,127  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
+                    23:09:09,195  INFO BatchUpdateLockConflictTest:263 - 单次批量更新发生异常，异常信息为： -> com.mysql.cj.jdbc.exceptions.MySQLTransactionRollbackException：Lock wait timeout exceeded; try restarting transaction
                      */
                     LOGGER.info("完成单次批量更新： -> startIndex:{}, endIndex:{}, updateCount:{}, 耗时{}秒", startIndex, endIndex, updateCount, innerBetween);
                 } catch (Exception e) {
@@ -272,7 +276,7 @@ public class BatchUpdateLockConflictTest {
 
         LocalTime endTime = LocalTime.now();
         Duration between = Duration.between(startTime, endTime);
-        // 23:39:55,071  INFO BatchUpdateLockConflictTest:276 - 完成全部批量更新： -> 耗时PT1M8.773S秒
+        // 23:09:09,196  INFO BatchUpdateLockConflictTest:278 - 完成全部批量更新： -> 耗时PT1M10.438S秒
         LOGGER.info("完成全部批量更新： -> 耗时{}秒", between);
     }
 
