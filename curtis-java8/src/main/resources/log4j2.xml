@@ -41,7 +41,7 @@
                 <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M -- %msg%xEx%n</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingRandomAccessFile>
 
@@ -54,7 +54,7 @@
                 <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} %-5level %class{36} %L %M -- %msg%xEx%n</pattern>
             </PatternLayout>
             <Policies>
-                <TimeBasedTriggeringPolicy interval="1" modulate="true" />
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
             </Policies>
         </RollingRandomAccessFile>
     </Appenders>
