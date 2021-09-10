@@ -17,14 +17,17 @@ public class ProvinceCity {
 
     private String cityName;
 
+    private Boolean isProvinceCapital;
+
     public ProvinceCity() {
     }
 
-    public ProvinceCity(Integer provinceCode, String provinceName, Integer cityCode, String cityName) {
+    public ProvinceCity(Integer provinceCode, String provinceName, Integer cityCode, String cityName, Boolean isProvinceCapital) {
         this.provinceCode = provinceCode;
         this.provinceName = provinceName;
         this.cityCode = cityCode;
         this.cityName = cityName;
+        this.isProvinceCapital = isProvinceCapital;
     }
 
     public Integer getProvinceCode() {
@@ -59,6 +62,14 @@ public class ProvinceCity {
         this.cityName = cityName;
     }
 
+    public Boolean getProvinceCapital() {
+        return isProvinceCapital;
+    }
+
+    public void setProvinceCapital(Boolean provinceCapital) {
+        isProvinceCapital = provinceCapital;
+    }
+
     @Override
     public String toString() {
         return "ProvinceCity{" +
@@ -66,6 +77,7 @@ public class ProvinceCity {
                 ", provinceName='" + provinceName + '\'' +
                 ", cityCode=" + cityCode +
                 ", cityName='" + cityName + '\'' +
+                ", isProvinceCapital=" + isProvinceCapital +
                 '}';
     }
 }
