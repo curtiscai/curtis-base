@@ -1,4 +1,4 @@
-package com.curtis.java8.model;
+package com.curtis.guava.model;
 
 import java.math.BigDecimal;
 
