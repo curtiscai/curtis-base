@@ -22,6 +22,31 @@
             <artifactId>junit</artifactId>
             <version>4.12</version>
         </dependency>
+
+        <!-- slf4j-api日志依赖 -->
+        <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api (Jun 18, 2021)-->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.31</version>
+        </dependency>
+
+        <!-- log4j日志依赖 -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core (Mar 12, 2021) -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-core</artifactId>
+            <version>2.14.1</version>
+        </dependency>
+
+        <!-- 用于slf4j与log4j2桥接 -->
+        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j-impl (Mar 12, 2021) -->
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-slf4j-impl</artifactId>
+            <version>2.14.1</version>
+            <!--            <scope>test</scope>-->
+        </dependency>
     </dependencies>
 
     <build>
