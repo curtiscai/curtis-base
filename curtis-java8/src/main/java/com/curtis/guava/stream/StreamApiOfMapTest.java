@@ -1,10 +1,9 @@
-package com.curtis.java8.stream;
+package com.curtis.guava.stream;
 
-import com.curtis.java8.model.City;
-import com.curtis.java8.model.Province;
-import com.curtis.java8.model.User;
+import com.curtis.guava.model.City;
+import com.curtis.guava.model.Province;
+import com.curtis.guava.model.User;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**

@@ -1,6 +1,6 @@
-package com.curtis.java8.stream;
+package com.curtis.guava.stream;
 
-import com.curtis.java8.model.ProvinceCity;
+import com.curtis.guava.model.ProvinceCity;
 import com.google.common.collect.Lists;
 import org.junit.Test;
 

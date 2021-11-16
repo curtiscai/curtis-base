@@ -1,7 +1,7 @@
-package com.curtis.java8;/**
+package com.curtis.apache;/**
 /**
  * @author curtis.cai
- * @desc Java8新特性的使用示例
+ * @desc Apache Api 使用示例
  * @date 2021-09-10
  * @email curtis.cai@outlook.com
  * @reference
