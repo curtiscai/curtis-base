@@ -47,4 +47,15 @@ public class MultimapsTest {
         setMultimap.put("河北", "保定");
         LOGGER.info("setMultimap->{}", setMultimap);
     }
+
+    @Test
+    public void testMultiset(){
+        HashMultiset<String> multiset = HashMultiset.create();
+        multiset.add("1");
+        multiset.add("1");
+        multiset.add("2");
+        multiset.add("3");
+        multiset.add("2");
+        System.out.println(multiset);
+    }
 }
