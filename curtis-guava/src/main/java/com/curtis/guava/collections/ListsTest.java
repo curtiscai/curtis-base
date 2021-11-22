@@ -58,7 +58,4 @@ public class ListsTest {
         // 20:33:11,105  INFO ListsExample:47 - transform2 -> [CHINA, GERMAN]
         LOGGER.info("transform2 -> {}", transform2);
     }
-
-
-
 }

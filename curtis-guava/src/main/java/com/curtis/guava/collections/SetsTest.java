@@ -24,6 +24,11 @@ public class SetsTest {
      */
     @Test
     public void testListToSet() {
+        // Set新建的时候直接初始化
+        Set<String> strSet = Sets.newHashSet("北京", "天津", "上海");
+        // 21:05:26,226  INFO SetsTest:29 - strSet -> [上海, 北京, 天津]
+        LOGGER.info("strSet -> {}", strSet);
+
         List<String> cityList = Lists.newArrayList("北京", "天津", "上海", "天津");
         // 使用List构建无序Set
         Set<String> citySet = Sets.newHashSet(cityList);
@@ -31,10 +36,9 @@ public class SetsTest {
         LOGGER.info("citySet -> {}", citySet);
 
         // 使用List构建有序Set
-        LinkedHashSet<String> cityLinkedHashSet = Sets.newLinkedHashSet(cityList);
-        // 21:06:39,815  INFO SetsTest:33 - cityLinkedHashSet -> [北京, 天津, 上海]
-        LOGGER.info("cityLinkedHashSet -> {}", cityLinkedHashSet);
-
+        LinkedHashSet<String> linkedHashSet = Sets.newLinkedHashSet(cityList);
+        // 21:06:39,815  INFO SetsTest:33 - linkedHashSet -> [北京, 天津, 上海]
+        LOGGER.info("cityLinkedHashSet -> {}", linkedHashSet);
     }
 
     /**
@@ -55,22 +59,31 @@ public class SetsTest {
         // 21:22:27,138  INFO SetsTest:53 - union -> [上海, 北京, 天津, 石家庄]
         LOGGER.info("union -> {}", union);
 
-        // 补集
+        // 补集(在集合A但是不在集合B的数据集合)
         Sets.SetView<String> difference = Sets.difference(set1, set2);
         // 21:22:27,138  INFO SetsTest:56 - difference -> [上海]
         LOGGER.info("difference -> {}", difference);
 
-        // 差集
+        // 差集(同时不在集合A和集合B的数据集合)
         Sets.SetView<String> symmetricDifference = Sets.symmetricDifference(set2, set1);
         // 21:22:27,139  INFO SetsTest:59 - symmetricDifference -> [石家庄, 上海]
         LOGGER.info("symmetricDifference -> {}", symmetricDifference);
     }
 
+    /**
+     * 构造有序集合TreeSet，并进行正向和逆向遍历（数值型使用）
+     */
     @Test
     public void testTreeSet() {
-        Set<Integer> hashSet = Sets.newHashSet(1, 3, 2, 4);
+        Set<Integer> hashSet = Sets.newHashSet(1, 3, 2, 4, 2, 1);
         TreeSet<Integer> treeSet = Sets.newTreeSet(hashSet);
-        System.out.println(treeSet);
-        treeSet.descendingIterator().forEachRemaining(System.out::println);
+        // 02:33:33,019  INFO SetsTest:77 - treeSet -> [1, 2, 3, 4]
+        LOGGER.info("treeSet -> {}", treeSet);
+
+        // 1234
+        treeSet.iterator().forEachRemaining(System.out::print);
+        System.out.println();
+        // 4321
+        treeSet.descendingIterator().forEachRemaining(System.out::print);
     }
 }
