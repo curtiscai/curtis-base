@@ -50,9 +50,24 @@ public class MapsTest {
         hashMap2.put("河北", "石家庄");
         hashMap2.put("北京", "北京");
         hashMap2.put("山西", "太原");
-        MapDifference<String, String> difference = Maps.difference(hashMap1, hashMap2);
-        // 23:11:37,783  INFO MapsTest:57 - difference->not equal: only on left={陕西=西安}: only on right={山西=太原}: value differences={河北=(保定, 石家庄)}
-        LOGGER.info("difference->{}", difference);
-    }
+        MapDifference<String, String> mapDifference = Maps.difference(hashMap1, hashMap2);
+        // 23:11:37,783  INFO MapsTest:57 - mapDifference->not equal: only on left={陕西=西安}: only on right={山西=太原}: value differences={河北=(保定, 石家庄)}
+        LOGGER.info("difference->{}", mapDifference);
 
+        // 键只存在于左边Map的映射项(只比较Key)
+        Map<String, String> entriesOnlyOnLeft = mapDifference.entriesOnlyOnLeft();
+        LOGGER.info("entriesOnlyOnLeft->{}", entriesOnlyOnLeft);
+
+        // 键只存在于右边Map的映射项(只比较Key)
+        Map<String, String> entriesOnlyOnRight = mapDifference.entriesOnlyOnRight();
+        LOGGER.info("entriesOnlyOnRight->{}", entriesOnlyOnRight);
+
+        // 两个Map中都有的映射项，包括匹配的键与值(Key相同，Value也相同)
+        Map<String, String> entriesInCommon = mapDifference.entriesInCommon();
+        LOGGER.info("entriesInCommon->{}", entriesInCommon);
+
+        // 键相同但是值不同值映射项。返回的Map的值类型为MapDifference.ValueDifference，以表示左右两个不同的值(Key相同，但是Value不同)
+        Map<String, MapDifference.ValueDifference<String>> entriesDiffering = mapDifference.entriesDiffering();
+        LOGGER.info("entriesDiffering->{}", entriesDiffering);
+    }
 }
