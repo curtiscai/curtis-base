@@ -30,6 +30,13 @@
             <version>3.12.0</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava (Mar 19, 2021) -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>30.1.1-jre</version>
+        </dependency>
+
         <!-- slf4j-api日志依赖 -->
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api (Jun 18, 2021)-->
         <dependency>
