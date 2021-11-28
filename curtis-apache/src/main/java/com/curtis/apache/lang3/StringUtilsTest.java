@@ -1,7 +1,6 @@
-package com.curtis.apache.lang3.string;
+package com.curtis.apache.lang3;
 
 import com.google.common.collect.Lists;
-import com.google.errorprone.annotations.Var;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
